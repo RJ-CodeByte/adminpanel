@@ -1,3 +1,4 @@
+import { DatePicker, Input } from "antd";
 import React from "react";
 
 //email error handling
@@ -8,14 +9,14 @@ const isValidEmail = (email) =>
   );
 
 export const handleEmailValidation = (email, errors) => {
-  console.log("ValidateEmail was called with", email);
+  // console.log("ValidateEmail was called with", email, errors);
 
   const isValid = isValidEmail(email);
 
   const validityChanged =
     (errors.email && isValid) || (!errors.email && !isValid);
   if (validityChanged) {
-    console.log("Fire tracker with", isValid ? "Valid" : "Invalid");
+    // console.log("Fire tracker with", isValid ? "Valid" : "Invalid");
   }
 
   return isValid;
@@ -23,29 +24,10 @@ export const handleEmailValidation = (email, errors) => {
 
 const errorMessage = (errors) => {
   if (errors) {
-    if (errors?.type == "required") {
-      return <span style={{ color: "#e55353" }}>{errors?.message}</span>;
-    }
     if (errors?.type == "validate") {
       return <span style={{ color: "#e55353" }}>invalid email</span>;
     }
-    if (
-      errors?.type == "minLength" &&
-      (errors?.ref?.id == "signinPwd" ||
-        errors?.ref?.id == "repeatPassword" ||
-        errors?.ref?.id == "newPassword" ||
-        errors?.ref?.id == "oldPassword")
-    ) {
-      return (
-        <span style={{ color: "#e55353" }}>Minimum 6 characters required</span>
-      );
-    }
-    if (errors?.ref?.id == "addArticle" || errors?.ref?.id == "trackurl") {
-      return <span style={{ color: "#e55353" }}>{errors.message}</span>;
-    }
-    if (errors?.type == "passwordEqual") {
-      return <span style={{ color: "#e55353" }}>{errors?.message}</span>;
-    }
+    return <span style={{ color: "#e55353" }}>{errors?.message}</span>;
   }
 };
 
@@ -66,48 +48,88 @@ export const RenderInput = ({
   // const shortenedLabel = name.toLowerCase().replace(/\s+/g, "");
   // console.log(shortenedLabel, errors);
   return (
-    <div
-      className={containerClass}
-      style={
-        outerStyle
-          ? {
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-            }
-          : {}
-      }
-    >
-      <div style={outerStyle ? { margin: 5 } : {}}>
-        <label style={labelStyle}>{labelName}</label>
-        {/* <input type={type} {...props} className={inputClass} name={name} /> */}
-        <input
-          type={type}
-          {...props}
-          {...register}
-          placeholder={placeholder}
-          onChange={onChange}
-        />
-      </div>
+    <>
+      <label className="inputEmail4 mb-2" style={labelStyle}>
+        {labelName}
+      </label>
+      <input
+        className="form-control"
+        type={type}
+        {...props}
+        {...register}
+        placeholder={placeholder}
+        onChange={onChange}
+      />
       {name && errors ? errorMessage(errors[name]) : ""}
-    </div>
+    </>
   );
 };
 
 //drop down button component
-export const Select = React.forwardRef(
-  ({ onChange, onBlur, name, label, options = [{}], errors }, ref) => (
-    <div style={{ flexDirection: "row", marginBlock: 20 }}>
-      <label style={{ marginRight: 10 }}>{label}</label>
-      <select name={name} ref={ref} onChange={onChange} onBlur={onBlur}>
+export const DropDown = React.forwardRef(
+  (
+    {
+      handleChange,
+      onBlur,
+      name,
+      label,
+      options = [{ label: "Select", value: "" }],
+      errors,
+      // ...rest
+    },
+    ref
+  ) => (
+    <>
+      <label className="inputEmail4 mb-2">{label}</label>
+      <select
+        className="form-select"
+        name={name}
+        ref={ref}
+        onChange={handleChange}
+        onBlur={onBlur}
+      >
         {options.map((obj) => (
           <option key={obj?.value} value={obj?.value}>
-            {obj?.name}
+            {obj?.label}
           </option>
         ))}
       </select>
-      {errors && errors["fruits"] && <span>*{label} is required</span>}
-    </div>
+      {name && errors ? errorMessage(errors[name]) : ""}
+    </>
   )
 );
+
+export const RenderDatePicker = ({
+  value,
+  format = "MM/DD/YYYY",
+  name,
+  onChange,
+  labelName,
+  errors,
+  disabledDate,
+  register,
+}) => {
+  return (
+    <div>
+      <label className="inputEmail4 mb-2">{labelName}</label>
+      <DatePicker
+        className="form-control"
+        value={value}
+        allowClear={false}
+        format={format}
+        name={name}
+        onChange={onChange}
+        // style={{ margin: 10 }}
+        disabledDate={disabledDate}
+      />
+      <RenderInput
+        value={value}
+        outerStyle={false}
+        type="hidden"
+        name={name}
+        register={register}
+        errors={errors}
+      />
+    </div>
+  );
+};

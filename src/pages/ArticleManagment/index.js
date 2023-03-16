@@ -20,7 +20,6 @@ export default function ArticleManagement() {
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    console.log("id", id);
     setShow(true);
     setDeleteId(id);
   };
@@ -63,9 +62,8 @@ export default function ArticleManagement() {
 
   const handlePageChange = (pageNumber) => {
     setState((prev) => ({ ...prev, activePage: pageNumber }));
-    console.log(Number(pageNumber - 1) * state.length);
     let data = {
-      start: Number(pageNumber - 1) * state.length,
+      start: (pageNumber - 1) * state.length,
       length: state.length,
       search: "",
     };
@@ -151,108 +149,114 @@ export default function ArticleManagement() {
   };
   return (
     <>
-      <AlertModal
-        show={show}
-        handleClose={handleClose}
-        handleSave={handleDelete}
-      />
+      {show && (
+        <AlertModal
+          show={show}
+          handleClose={handleClose}
+          handleSave={handleDelete}
+        />
+      )}
       <div
+        className="m-4"
         style={{ display: "flex", justifyContent: "space-between", margin: 20 }}
       >
-        <input
-          placeholder="Search the content..."
-          type="text"
-          name="text"
-          className="input"
-          onChange={(e) => onSearchHandler(e)}
-        />
+        <div class="form-group has-search">
+          <span class="fa fa-search form-control-feedback"></span>
+          <input
+            class="form-control"
+            placeholder="Search"
+            type="text"
+            name="text"
+            onChange={(e) => onSearchHandler(e)}
+          />
+        </div>
+
         <p>Total Records {totalRecords}</p>
 
-        <Link class="btn btn-primary" to="add">
+        <Link className="btn btn-primary" to="add">
           Add
         </Link>
       </div>
-      <div className="col-md-12">
-        <div className="react-bootstrap-table">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th tabindex="0" aria-label="Image sortable" class="sortable">
-                  Image<span class="order-4"></span>
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  Title<span class="order-4"></span>
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {console.log(state.data.length != null ? true : false)} */}
-              {state.data.length > 0 ? (
-                state.data.map((obj) => {
-                  return (
-                    <tr key={obj.id} className="list-group-obj">
-                      <td className="font-weight-bold pr-2">
-                        <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                          <img
-                            src={API_IMAGE_BASE + "article/" + obj.image}
-                            height="50"
-                            width="50"
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                          {obj.title}
-                        </div>
-                      </td>
-                      <td>
-                        <Button
-                          variant="primary"
-                          onClick={() => {
-                            navigation(`edit/${obj._id}`);
-                          }}
-                        >
-                          Edit
-                        </Button>{" "}
-                        <Button
-                          variant="danger"
-                          onClick={() => handleShow(obj._id)}
-                        >
-                          Delete
-                        </Button>{" "}
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
+      <div className="h-100 d-flex flex-column m-4">
+        <div className="row justify-content-center">
+          <div className="react-bootstrap-table">
+            <table className="table table-bordered">
+              <thead>
                 <tr>
-                  <td
-                    data-toggle="collapse"
-                    className="react-bs-table-no-data"
-                    colspan="9"
-                  >
-                    <h1 style={{ textAlign: "center" }}>
-                      !! No Data Avilable !!
-                    </h1>
-                  </td>
+                  <th>
+                    Image<span></span>
+                  </th>
+                  <th>
+                    Title<span></span>
+                  </th>
+                  <th> Action</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div
-          style={{
-            justifyContent: "space-between",
-            display: "flex",
-            flexDirection: "row-reverse",
-          }}
-        >
-          <Pagination className="px-4">{renderPagination()}</Pagination>
-          {DataLength()}
+              </thead>
+              <tbody>
+                {/* {console.log(state.data.length != null ? true : false)} */}
+                {state.data.length > 0 ? (
+                  state.data.map((obj) => {
+                    return (
+                      <tr key={obj.id} className="list-group-obj">
+                        <td className="font-weight-bold pr-2">
+                          <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                            <img
+                              src={API_IMAGE_BASE + "article/" + obj.image}
+                              height="50"
+                              width="50"
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                            {obj.title}
+                          </div>
+                        </td>
+                        <td>
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              navigation(`edit/${obj._id}`);
+                            }}
+                          >
+                            Edit
+                          </Button>{" "}
+                          <Button
+                            variant="danger"
+                            onClick={() => handleShow(obj._id)}
+                          >
+                            Delete
+                          </Button>{" "}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      data-toggle="collapse"
+                      className="react-bs-table-no-data"
+                      colspan="9"
+                    >
+                      <h1 style={{ textAlign: "center" }}>
+                        !! No Data Avilable !!
+                      </h1>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div
+            style={{
+              justifyContent: "space-between",
+              display: "flex",
+              flexDirection: "row-reverse",
+            }}
+          >
+            <Pagination className="px-4">{renderPagination()}</Pagination>
+            {DataLength()}
+          </div>
         </div>
       </div>
     </>

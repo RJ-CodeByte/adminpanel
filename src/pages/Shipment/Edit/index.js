@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { RenderInput } from "../../../components/common/FormField";
+import {
+  DropDown,
+  RenderDatePicker,
+  RenderInput,
+} from "../../../components/common/FormField";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,7 +15,6 @@ import {
   shipmentListAction,
 } from "../../../Redux/ShipmentSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_IMAGE_BASE } from "../../../constants";
 import moment from "moment";
 // import DatePicker from "react-datepicker";
 import { DatePicker, Space } from "antd";
@@ -27,7 +30,7 @@ export default function EditShipment() {
     formState: { errors },
     clearErrors,
   } = useForm({
-    mode: "onBlur",
+    mode: "all",
   });
   const dispatch = useDispatch();
   const navigation = useNavigate();
@@ -104,7 +107,10 @@ export default function EditShipment() {
     };
     dispatch(getPatientAddress(addressPayload))
       .then((res) => {
-        setState((prev) => ({ ...prev, patientAddressOption: res.data }));
+        setState((prev) => ({
+          ...prev,
+          patientAddressOption: res.data,
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -164,8 +170,14 @@ export default function EditShipment() {
   };
 
   const onPatientChange = (e) => {
-    setState((prev) => ({ ...prev, selectedPatient: e.target.value }));
-    onMedicationAndAddress(e.target.value);
+    console.log(e);
+    setState((prev) => ({
+      ...prev,
+      selectedPatient: e,
+      selectedAddress: "",
+      selectedMedication: "",
+    }));
+    onMedicationAndAddress(e);
   };
 
   const onMedicationAndAddress = (id) => {
@@ -176,7 +188,11 @@ export default function EditShipment() {
     };
     dispatch(getPatientAddress(addressPayload))
       .then((res) => {
-        setState((prev) => ({ ...prev, selectedAddress: "" }));
+        setState((prev) => ({
+          ...prev,
+          selectedAddress: "",
+          patientAddressOption: res.data,
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -186,7 +202,11 @@ export default function EditShipment() {
     };
     dispatch(getMedications(medicationPayload))
       .then((res) => {
-        setState((prev) => ({ ...prev, selectedMedication: "" }));
+        setState((prev) => ({
+          ...prev,
+          selectedMedication: "",
+          medicationsOption: res.data,
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -194,119 +214,90 @@ export default function EditShipment() {
   };
 
   const Patients = () => {
+    const patientNames = patientsList?.map((obj) => {
+      return {
+        label: obj.name,
+        value: obj._id,
+      };
+    });
     return (
-      <div>
-        <label htmlFor="pname" style={{ marginRight: 10 }}>
-          Patient Name:
-        </label>
-        <select
+      <div className="col-md-6">
+        <DropDown
           name="selectedPatient"
+          label="Patient Name:"
+          style={{ width: 200 }}
           value={state?.selectedPatient}
-          onChange={(e) => onPatientChange(e)}
-        >
-          {patientsList?.map((obj) => {
-            return <option value={obj?._id}>{obj?.name}</option>;
+          {...register("selectedPatient", {
+            required: "Patient name required",
           })}
-        </select>
-        <RenderInput
-          value={state?.selectedPatient}
-          outerStyle={false}
-          type="hidden"
-          name="selectedPatient"
-          register={{
-            ...register("selectedPatient", {
-              required: "Patient name required",
-            }),
-          }}
+          handleChange={(e) => onPatientChange(e.target.value)}
+          options={patientNames}
           errors={errors}
         />
       </div>
     );
   };
   const Medications = () => {
+    const medications = state.medicationsOption?.map((obj) => {
+      console.log(obj);
+      return {
+        label: obj.name,
+        value: obj.medicationId,
+      };
+    });
+    medications.unshift({ label: "Select", value: "" });
     return (
-      <div>
-        <label htmlFor="mname" style={{ marginRight: 10 }}>
-          Medication Name
-        </label>
-        <select
+      <div className=" col-md-6">
+        <DropDown
           name="selectedMedication"
-          value={state.selectedMedication}
-          onChange={(e) =>
+          label="Medication Name: "
+          style={{ width: 200 }}
+          value={state?.selectedMedication}
+          {...register("selectedMedication", {
+            required: "Medication required",
+          })}
+          handleChange={(e) =>
             setState((prev) => ({
               ...prev,
               selectedMedication: e.target.value,
             }))
           }
-        >
-          <option value="">select</option>
-          {state.medicationsOption?.map((obj) => {
-            return <option value={obj.medicationId}>{obj.name}</option>;
-          })}
-        </select>
-        <RenderInput
-          outerStyle={false}
-          value={state?.selectedMedication}
-          type="hidden"
-          name="selectedMedication"
-          register={{
-            ...register("selectedMedication", {
-              required: "Medication required",
-            }),
-          }}
+          options={medications}
           errors={errors}
         />
       </div>
     );
   };
   const PatientAddress = () => {
+    const address = state.patientAddressOption?.map((obj) => {
+      const address =
+        obj?.addressLine1 + "  " + obj?.addressLine2 + "  " + obj?.city;
+      return {
+        label: address,
+        value: obj._id,
+      };
+    });
+    address.unshift({ label: "Select", value: "" });
     return (
-      <>
-        <label htmlFor="paddress" style={{ marginRight: 10 }}>
-          Patient Address
-        </label>
-        <select
+      <div className="col-md-8">
+        <DropDown
           name="selectedAddress"
-          value={state.selectedAddress}
-          onChange={(e) =>
+          label="Patient Address: "
+          style={{ width: 200 }}
+          value={state?.selectedAddress}
+          {...register("selectedAddress", {
+            required: "Patient address required",
+          })}
+          handleChange={(e) =>
             setState((prev) => ({
               ...prev,
               selectedAddress: e.target.value,
             }))
           }
-        >
-          <option value="">select</option>
-          {state.patientAddressOption?.map((obj) => {
-            const address =
-              obj?.addressLine1 + "  " + obj?.addressLine2 + "  " + obj?.city;
-            return (
-              <option
-                value={obj._id}
-                onChange={(e) =>
-                  setState((prev) => ({
-                    ...prev,
-                    selectedAddress: e.target.value,
-                  }))
-                }
-              >
-                {address}
-              </option>
-            );
-          })}
-        </select>
-        <RenderInput
-          outerStyle={false}
-          value={state?.selectedAddress}
-          type="hidden"
-          name="selectedAddress"
-          register={{
-            ...register("selectedAddress", {
-              required: "Address required",
-            }),
-          }}
+          options={address}
           errors={errors}
         />
-      </>
+      </div>
     );
   };
   const onShipDateChange = (startDate) => {
@@ -323,135 +314,112 @@ export default function EditShipment() {
   };
   return (
     <>
-      <h2 style={{ textAlign: "center" }}>Shipment Edit Management</h2>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{
-            flexDirection: "column",
-            height: "100vh",
-            display: "flex",
-          }}
-        >
-          <br />
-          <div>
-            {Patients()}
-            {Medications()}
-            {PatientAddress()}
-            <RenderInput
-              outerStyle={false}
-              name="trackUrl"
-              type="text"
-              labelName="Track Url"
-              id="trackurl"
-              value={state.trackUrl}
-              labelStyle={{ marginRight: 10 }}
-              style={{ marginBlock: 15 }}
-              register={{
-                ...register("trackUrl", {
-                  required: "Track URL required",
-                  minLength: {
-                    value: 2,
-                    message: "Track URL must be at least 2 characters",
-                  },
-                }),
-              }}
-              onChange={(e) =>
-                setState((prevState) => ({
-                  ...prevState,
-                  trackUrl: e.target.value,
-                }))
-              }
-              errors={errors}
-              placeholder="Track Url"
-            />
-            <RenderInput
-              outerStyle={false}
-              labelName="Dosage"
-              name="dosage"
-              type="text"
-              value={state.dosage}
-              style={{ marginBlock: 15 }}
-              labelStyle={{ marginRight: 10 }}
-              register={{
-                ...register("dosage", {
-                  required: "Dosage required",
-                }),
-              }}
-              onChange={(e) =>
-                setState((prevState) => ({
-                  ...prevState,
-                  dosage: e.target.value,
-                }))
-              }
-              errors={errors}
-              placeholder="Track Url"
-            />
-
-            <label>Shipment Date</label>
-            {/* <DatePicker
-              selected={state.shipDate}
-              onChange={(e) => onShipDateChange(e)}
-              name="startDate"
-              dateFormat="MM/dd/yyyy"
-            /> */}
-            <DatePicker
-              value={state.shipDate}
-              format="MM/DD/YYYY"
-              allowClear={false}
-              name={"startdate"}
-              onChange={(e) => onShipDateChange(e)}
-              style={{ margin: 10 }}
-            />
-            <RenderInput
-              outerStyle={false}
-              value={state?.shipDate}
-              type="hidden"
-              name="startDate"
-              register={{
-                ...register("startDate", {
-                  required: "Delivery Date required",
-                }),
-              }}
-              errors={errors}
-            />
-            <label>Next Shipment Date</label>
-            {/* <DatePicker
-              selected={state.nextShipDate}
-              onChange={(e) => onNextDateChange(e)}
-              name="endDate"
-              dateFormat="MM/dd/yyyy"
-            /> */}
-            <DatePicker
-              value={state.nextShipDate}
-              format="MM/DD/YYYY"
-              onChange={(e) => onNextDateChange(e)}
-              name={"enddate"}
-              disabledDate={(current) => {
-                return current && current < dayjs(state.shipDate).add(1, "day");
-              }}
-              allowClear={false}
-            />
-            <RenderInput
-              outerStyle={false}
-              value={state?.nextShipDate}
-              type="hidden"
-              name="endDate"
-              register={{
-                ...register("endDate", {
-                  required: "Shipment required",
-                }),
-              }}
-              errors={errors}
-            />
+      <div class="row">
+        <div className="col-12 d-flex justify-content-center align-self-center ">
+          <div className="card p-5">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <h4
+                className="col-sm-12 card-title"
+                style={{ textAlign: "center" }}
+              >
+                Shipment Edit Management
+              </h4>
+              <div className="row">
+                {Patients()}
+                {Medications()}
+              </div>
+              <div className="row">
+                <div className=" col-md-6 mt-2">
+                  <RenderInput
+                    outerStyle={false}
+                    name="trackUrl"
+                    type="text"
+                    labelName="Track Url"
+                    id="trackurl"
+                    value={state.trackUrl}
+                    labelStyle={{ marginRight: 10 }}
+                    style={{ marginBlock: 15 }}
+                    register={{
+                      ...register("trackUrl", {
+                        required: "Track URL required",
+                        minLength: {
+                          value: 2,
+                          message: "Track URL must be at least 2 characters",
+                        },
+                      }),
+                    }}
+                    onChange={(e) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        trackUrl: e.target.value,
+                      }))
+                    }
+                    errors={errors}
+                    placeholder="Track Url"
+                  />
+                </div>
+                <div className="col-md-6 mt-2">
+                  <RenderInput
+                    outerStyle={false}
+                    labelName="Dosage"
+                    name="dosage"
+                    type="text"
+                    value={state.dosage}
+                    style={{ marginBlock: 15 }}
+                    labelStyle={{ marginRight: 10 }}
+                    register={{
+                      ...register("dosage", {
+                        required: "Dosage required",
+                      }),
+                    }}
+                    onChange={(e) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        dosage: e.target.value,
+                      }))
+                    }
+                    errors={errors}
+                    placeholder="Track Url"
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className=" col-md-6 mt-2">
+                  <RenderDatePicker
+                    labelName={"Shipment Date"}
+                    value={state?.shipDate}
+                    name="shipDate"
+                    onChange={(e) => onShipDateChange(e)}
+                  />
+                </div>
+                <div className=" col-md-6 mt-2">
+                  <RenderDatePicker
+                    labelName={"Next Shipment Date"}
+                    value={state?.nextShipDate}
+                    name={"nextShipDate"}
+                    register={{
+                      ...register("nextShipDate", {
+                        required: "Please Select",
+                      }),
+                    }}
+                    errors={errors}
+                    disabledDate={(current) => {
+                      return (
+                        current && current < dayjs(state.shipDate).add(1, "day")
+                      );
+                    }}
+                    onChange={(e) => onNextDateChange(e)}
+                  />
+                </div>
+              </div>
+              {PatientAddress()}
+              {/* <input type="submit" /> */}
+              <button className="btn btn-primary mt-4" type="submit">
+                Submit Shipment
+              </button>
+            </form>
           </div>
-          <input type="submit" />
-        </form>
+        </div>
       </div>
     </>
   );

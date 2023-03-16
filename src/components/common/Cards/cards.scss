@@ -1,4 +1,4 @@
-.card {
+.cardStyle {
   width: 200px;
   min-height: 164px;
   padding: 0.8em;
@@ -8,15 +8,15 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-.card-img {
-  background-color: #ffcaa6;
-  height: 40%;
-  width: 100%;
-  border-radius: 0.5rem;
-  transition: 0.3s ease;
-}
+// .card-img {
+//   background-color: #ffcaa6;
+//   height: 40%;
+//   width: 100%;
+//   border-radius: 0.5rem;
+//   transition: 0.3s ease;
+// }
 
-.card-info {
+.cardStyle-info {
   padding-top: 10%;
 }
 
@@ -25,7 +25,7 @@ svg {
   height: 20px;
 }
 
-.card-footer {
+.cardStyle-footer {
   width: 100%;
   display: flex;
   justify-content: space-between;

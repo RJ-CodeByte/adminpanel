@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { articleListAction, deleteArticle } from "../../Redux/ArticleSlice";
 import Pagination from "react-bootstrap/Pagination";
-import { API_IMAGE_BASE } from "../../constants";
 import { Button } from "react-bootstrap";
 import AlertModal from "../../components/common/Modal";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteShipment, shipmentListAction } from "../../Redux/ShipmentSlice";
 import moment from "moment";
+import "../../scss/formStyle.scss";
 
 export default function Shipment() {
   const dispatch = useDispatch();
@@ -49,7 +48,7 @@ export default function Shipment() {
   }, [shipmentList]);
   useEffect(() => {
     let payload = {
-      start: state.activePage,
+      start: state.activePage == 1 ? 0 : state.activePage,
       length: state.length,
       search: "",
     };
@@ -145,157 +144,160 @@ export default function Shipment() {
   };
   return (
     <>
-      <AlertModal
-        show={show}
-        handleClose={handleClose}
-        handleSave={handleDelete}
-      />
+      {show && (
+        <AlertModal
+          show={show}
+          handleClose={handleClose}
+          handleSave={handleDelete}
+        />
+      )}
       <div
-        style={{ display: "flex", justifyContent: "space-between", margin: 20 }}
+        style={{ display: "flex", justifyContent: "space-between", margin: 10 }}
       >
         <input
           placeholder="Searth the content..."
           type="text"
           name="text"
-          className="input"
+          className="search"
           onChange={(e) => onSearchHandler(e)}
         />
         <p>Total Records {totalRecords}</p>
-        <Link class="btn btn-primary" to="add">
+        <Link class="btn btn-primary" to="add" style={{ height: 40 }}>
           Add
         </Link>
       </div>
-      <div className="col-md-12">
-        <div className="react-bootstrap-table">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th tabindex="0" aria-label="Image sortable" class="sortable">
-                  Patient Name<span class="order-4"></span>
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  Username<span class="order-4"></span>
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Medicaiton Name
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Shipment Date
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Next Shipment Date
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Track URL
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Dosage
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Address
-                </th>
-                <th tabindex="0" aria-label="Title sortable" class="sortable">
-                  {" "}
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {state.data?.map((item) => {
-                const {
-                  _id,
-                  patinetName,
-                  ownerName,
-                  medicationName,
-                  deliveryDate,
-                  nextDeliveryDate,
-                  trackUrl,
-                  dosage,
-                  addressLine,
-                } = item;
-                const nextdiliveryDate = moment(nextDeliveryDate)
-                  .format("YYYY-MM-DD")
-                  .toString();
-                const diliveryDate = moment(deliveryDate)
-                  .format("YYYY-MM-DD")
-                  .toString();
-
-                return (
-                  <tr key={_id} className="list-group-obj">
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {patinetName}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {ownerName}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {medicationName}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {diliveryDate}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {nextdiliveryDate}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {trackUrl}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {dosage}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
-                        {addressLine}
-                      </div>
-                    </td>
-                    <td>
-                      <Button
-                        variant="primary"
-                        onClick={() => {
-                          navigation(`edit/${_id}`);
-                        }}
-                      >
-                        Edit
-                      </Button>{" "}
-                      <Button variant="danger" onClick={() => handleShow(_id)}>
-                        Delete
-                      </Button>{" "}
-                    </td>
+      <div className="h-100 d-flex flex-column m-2">
+        <div className="row justify-content-center">
+          <div className="">
+            <div className="react-bootstrap-table">
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>
+                      Patient Name<span class="order-4"></span>
+                    </th>
+                    <th>
+                      Username<span class="order-4"></span>
+                    </th>
+                    <th> Medicaiton Name</th>
+                    <th> Shipment Date</th>
+                    <th> Next Shipment Date</th>
+                    <th> Track URL</th>
+                    <th> Dosage</th>
+                    <th> Address</th>
+                    <th> Action</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div
-          style={{
-            justifyContent: "space-between",
-            display: "flex",
-            flexDirection: "row-reverse",
-          }}
-        >
-          <Pagination className="px-4">{renderPagination()}</Pagination>
-          {DataLength()}
+                </thead>
+                <tbody>
+                  {state.data.length > 0 ? (
+                    state.data?.map((item) => {
+                      const {
+                        _id,
+                        patinetName,
+                        ownerName,
+                        medicationName,
+                        deliveryDate,
+                        nextDeliveryDate,
+                        trackUrl,
+                        dosage,
+                        addressLine,
+                      } = item;
+                      const nextdiliveryDate = moment(nextDeliveryDate)
+                        .format("DD-MM-YYYY")
+                        .toString();
+                      const diliveryDate = moment(deliveryDate)
+                        .format("DD-MM-YYYY")
+                        .toString();
+
+                      return (
+                        <tr key={_id} className="list-group-obj">
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {patinetName}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {ownerName}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {medicationName}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {diliveryDate}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {nextdiliveryDate}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {trackUrl}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {dosage}
+                            </div>
+                          </td>
+                          <td>
+                            <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                              {addressLine}
+                            </div>
+                          </td>
+                          <td>
+                            <Button
+                              variant="primary"
+                              onClick={() => {
+                                navigation(`edit/${_id}`);
+                              }}
+                            >
+                              Edit
+                            </Button>{" "}
+                            <Button
+                              variant="danger"
+                              onClick={() => handleShow(_id)}
+                            >
+                              Delete
+                            </Button>{" "}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td
+                        data-toggle="collapse"
+                        className="react-bs-table-no-data"
+                        colspan="9"
+                      >
+                        <h1 style={{ textAlign: "center" }}>
+                          !! No Data Avilable !!
+                        </h1>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                marginLeft: 1,
+                flexDirection: "row-reverse",
+              }}
+            >
+              <Pagination className="px-4">{renderPagination()}</Pagination>
+              {DataLength()}
+            </div>
+          </div>
         </div>
       </div>
     </>

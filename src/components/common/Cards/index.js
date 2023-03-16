@@ -3,8 +3,8 @@ import "./cards.scss";
 
 export default function Cards({ title, details }) {
   return (
-    <div className="card">
-      <div className="card-info">
+    <div className="cardStyle">
+      <div className="cardStyle-info">
         <p className="text-title">{title}</p>
         <p className="text-body">{details}</p>
       </div>

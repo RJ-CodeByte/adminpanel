@@ -15,7 +15,7 @@ export default function ForgetPassword() {
     formState: { errors },
     clearErrors,
   } = useForm({
-    mode: "onBlur",
+    mode: "all",
   });
 
   const [email, setEmail] = useState();

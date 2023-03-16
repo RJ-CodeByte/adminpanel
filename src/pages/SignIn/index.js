@@ -26,7 +26,7 @@ const SignIn = () => {
     formState: { errors },
     clearErrors,
   } = useForm({
-    mode: "onBlur",
+    mode: "all",
   });
 
   useEffect(() => {
@@ -123,7 +123,11 @@ const SignIn = () => {
             register={{
               ...register("password", {
                 required: "required",
-                minLength: 6,
+                // minLength: 6,
+                minLength: {
+                  value: 6,
+                  message: "Minimum 6 characters required",
+                },
               }),
             }}
             onChange={(e) => handleOnchange(e)}
