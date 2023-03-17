@@ -13,12 +13,9 @@ export default function ForgetPassword() {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors,
   } = useForm({
     mode: "all",
   });
-
-  const [email, setEmail] = useState();
 
   const onSubmit = (data) => {
     console.log("data", data);
@@ -33,54 +30,34 @@ export default function ForgetPassword() {
     }
   };
 
-  const handleOnchange = (e) => {
-    // console.log("formdata", e);
-    if (e.target.name == "email") {
-      if (e.target.value != "") {
-        setEmail(e.target.value);
-        // clearErrors(["email"]);
-      }
-    }
-  };
-
   return (
     <>
-      <div>
-        <h2 style={{ textAlign: "center" }}>In SignIn</h2>
-      </div>
-      <br />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{
-            flexDirection: "column",
-            height: "100vh",
-            display: "flex",
-          }}
-        >
-          <br />
-          <RenderInput
-            labelName={"Email"}
-            style={{ marginLeft: 20 }}
-            name="email"
-            type="text"
-            register={{
-              ...register("email", {
-                required: "required",
-                validate: () => handleEmailValidation(email, errors),
-              }),
-            }}
-            onChange={(e) => handleOnchange(e)}
-            errors={errors}
-            placeholder="Email"
-          />
-          <input type="submit" value={"Forgot Password"} />
-        </form>
+      <div className="row vh-100">
+        <div className="col-12 d-flex  justify-content-center align-self-center">
+          <div className="card p-5 w-50">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <h4 className="col-sm-12 card-title">In ForgetPassword</h4>
+
+              <div className="col-md-4">
+                <RenderInput
+                  name="email"
+                  type="text"
+                  register={{
+                    ...register("email", {
+                      required: "required",
+                      validate: (v) => handleEmailValidation(v, errors.email),
+                    }),
+                  }}
+                  errors={errors?.email}
+                  placeholder="Email"
+                />
+              </div>
+              <div className="col-md-12 mt-4">
+                <input type="submit" value={"Forgot Password"} />
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );

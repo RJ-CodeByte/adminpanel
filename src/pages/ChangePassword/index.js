@@ -37,12 +37,6 @@ const MyAccount = () => {
   const onSubmit = (data) => {
     console.log("data", data);
     if (data) {
-      // handleClick();
-      // let data = {
-      //   currentPassword: "1234567",
-      //   newPassword: "123456",
-      //   repeatPassword: "123456",
-      // };
       const { oldpassword, newpassword, repeatpassword } = data;
       let pwdData = {
         currentPassword: oldpassword,
@@ -74,8 +68,7 @@ const MyAccount = () => {
                       },
                     }),
                   }}
-                  // onChange={(e) => handleOnchange(e)}
-                  errors={errors}
+                  errors={errors?.oldpassword}
                   placeholder="Old password"
                 />
               </div>
@@ -93,8 +86,7 @@ const MyAccount = () => {
                       },
                     }),
                   }}
-                  // onChange={(e) => handleOnchange(e)}
-                  errors={errors}
+                  errors={errors?.newpassword}
                   placeholder="password"
                 />
               </div>
@@ -116,7 +108,7 @@ const MyAccount = () => {
                       },
                     }),
                   }}
-                  errors={errors}
+                  errors={errors?.repeatpassword}
                   placeholder="password"
                 />
               </div>

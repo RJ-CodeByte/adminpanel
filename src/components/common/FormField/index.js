@@ -13,8 +13,7 @@ export const handleEmailValidation = (email, errors) => {
 
   const isValid = isValidEmail(email);
 
-  const validityChanged =
-    (errors.email && isValid) || (!errors.email && !isValid);
+  const validityChanged = (errors && isValid) || (!errors && !isValid);
   if (validityChanged) {
     // console.log("Fire tracker with", isValid ? "Valid" : "Invalid");
   }
@@ -33,17 +32,13 @@ const errorMessage = (errors) => {
 
 //basic input component
 export const RenderInput = ({
-  name,
   labelName = "",
   type = "text",
-  containerClass,
   placeholder,
   outerStyle = true,
-  register,
   errors,
-  onChange,
   labelStyle,
-  ...props
+  register,
 }) => {
   // const shortenedLabel = name.toLowerCase().replace(/\s+/g, "");
   // console.log(shortenedLabel, errors);
@@ -55,12 +50,11 @@ export const RenderInput = ({
       <input
         className="form-control"
         type={type}
-        {...props}
+        // {...props}
         {...register}
         placeholder={placeholder}
-        onChange={onChange}
       />
-      {name && errors ? errorMessage(errors[name]) : ""}
+      {errors ? errorMessage(errors) : ""}
     </>
   );
 };
@@ -94,7 +88,7 @@ export const DropDown = React.forwardRef(
           </option>
         ))}
       </select>
-      {name && errors ? errorMessage(errors[name]) : ""}
+      {errors ? errorMessage(errors) : ""}
     </>
   )
 );

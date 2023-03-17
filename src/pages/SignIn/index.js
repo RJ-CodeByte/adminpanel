@@ -17,31 +17,25 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-
   const {
     register,
-    handleSubmit,
     formState: { errors },
-    clearErrors,
+    handleSubmit,
   } = useForm({
     mode: "all",
   });
+  console.log("clear", errors);
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-  console.log(errors);
+  // console.log(errors);
 
-  const handleClick = () => {
+  const handleClick = (data) => {
     // let requestPayload = {
     //   email: "admin.gvb@yopmail.com",
     //   password: "123456",
     // };
     let requestPayload = {
-      email: email,
-      password: password,
+      email: data.email,
+      password: data.password,
     };
 
     dispatch(loginAction(requestPayload))
@@ -50,94 +44,83 @@ const SignIn = () => {
   };
 
   const onSubmit = (data) => {
-    // console.log("data", data);
+    console.log("yooo");
+    console.log("data", data);
     if (data) {
-      handleClick();
+      handleClick(data);
     }
   };
 
-  const handleOnchange = (e) => {
-    // console.log("formdata", e);
-    if (e.target.name == "email") {
-      if (e.target.value != "") {
-        setEmail(e.target.value);
-        // clearErrors(["email"]);
-      }
-    }
-    if (e.target.name == "password") {
-      if (e.target.value != "") {
-        setPassword(e.target.value);
-        // clearErrors(["password"]);
-      }
-    }
-  };
+  // const handleOnchange = (e) => {
+  //   if (e.target.name == "email") {
+  //     if (e.target.value != "") {
+  //       setEmail(e.target.value);
+  //       // clearErrors(["email"]);
+  //     }
+  //   }
+  //   if (e.target.name == "password") {
+  //     if (e.target.value != "") {
+  //       setPassword(e.target.value);
+  //       // clearErrors(["password"]);
+  //     }
+  //   }
+  // };
 
   return (
     <>
-      <div>
-        <h2 style={{ textAlign: "center" }}>In SignIn</h2>
-      </div>
-      <br />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          // alignItems: "center",
-        }}
-      >
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{
-            flexDirection: "column",
-            height: "100vh",
-            display: "flex",
-          }}
-        >
-          <br />
-          <RenderInput
-            labelName={"Email"}
-            name="email"
-            type="text"
-            style={{ marginLeft: 32 }}
-            register={{
-              ...register("email", {
-                required: "required",
-                onChange: (e) => {
-                  console.log("error", e);
-                },
-                validate: () => handleEmailValidation(email, errors),
-              }),
-            }}
-            onChange={(e) => handleOnchange(e)}
-            errors={errors}
-            placeholder="Email"
-          />
+      <div className="row vh-100">
+        <div className="col-12 d-flex justify-content-center align-self-center">
+          <div className="card p-5 w-50">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <h4 className="col-sm-12 card-title">In SignIn</h4>
+              <div className="col-md-4">
+                <RenderInput
+                  labelName={"Email"}
+                  name="email"
+                  type="text"
+                  register={{
+                    ...register("email", {
+                      required: "required",
+                      validate: (v) => handleEmailValidation(v, errors?.email),
+                    }),
+                  }}
+                  errors={errors?.email}
+                  placeholder="Email"
+                />
+              </div>
 
-          <RenderInput
-            labelName={"Password"}
-            placeholder={"Password"}
-            name="password"
-            id="signinPwd"
-            type="password"
-            style={{ marginLeft: 10 }}
-            register={{
-              ...register("password", {
-                required: "required",
-                // minLength: 6,
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters required",
-                },
-              }),
-            }}
-            onChange={(e) => handleOnchange(e)}
-            errors={errors}
-          />
-          <span style={{ textAlign: "end", padding: 5 }}>
-            <Link to="/forgetPassword">Forget Password?</Link>
-          </span>
-          <input type="submit" />
-        </form>
+              <div className="col-md-4">
+                <RenderInput
+                  labelName={"Password"}
+                  placeholder={"Password"}
+                  name="password"
+                  id="signinPwd"
+                  type="password"
+                  register={{
+                    ...register("password", {
+                      required: "required",
+                      minLength: {
+                        value: 6,
+                        message: "Minimum 6 characters required",
+                      },
+                    }),
+                  }}
+                  errors={errors?.password}
+                />
+              </div>
+              <div className="row mt-2">
+                <div className="col-md-2" />
+                <div className="col-md-8 align-self-end">
+                  <Link to="/forgetPassword">Forget Password?</Link>
+                </div>
+              </div>
+
+              {/* <div className="col-md-12 mt-4"> */}
+              <input name="submit" type="submit" />
+              {/* </div> */}
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );

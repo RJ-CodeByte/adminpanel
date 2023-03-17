@@ -112,7 +112,7 @@ export default function EditArticle() {
                   />
                 )}
               </div>
-              <div className="col-md-8">
+              <div className="col-md-8 mb-4">
                 <RenderInput
                   // labelName={"Email"}
                   outerStyle={false}
@@ -120,7 +120,6 @@ export default function EditArticle() {
                   type="text"
                   id="addArticle"
                   value={state.title}
-                  style={{ marginBlock: 15 }}
                   register={{
                     ...register("title", {
                       required: "Title required",
@@ -137,7 +136,7 @@ export default function EditArticle() {
                       title: e.target.value,
                     }))
                   }
-                  errors={errors}
+                  errors={errors?.title}
                   placeholder="Title"
                 />
               </div>
@@ -146,19 +145,12 @@ export default function EditArticle() {
                   name="content"
                   className="form-control"
                   {...register("content", {
-                    required: "content Required",
+                    required: "Content Required",
                     minLength: {
                       value: 2,
                       message: "Content must be at least 2 characters",
                     },
                   })}
-                  value={state.content}
-                  onChange={(e) =>
-                    setState((prevState) => ({
-                      ...prevState,
-                      content: e.target.value,
-                    }))
-                  }
                   placeholder="content"
                   type="text"
                 />

@@ -29,6 +29,7 @@ export default function EditShipment() {
     reset,
     formState: { errors },
     clearErrors,
+    setValue,
   } = useForm({
     mode: "all",
   });
@@ -132,8 +133,6 @@ export default function EditShipment() {
   }, [state]);
 
   const onSubmit = (data) => {
-    console.log(data);
-
     if (data) {
       const {
         selectedPatient,
@@ -232,7 +231,7 @@ export default function EditShipment() {
           })}
           handleChange={(e) => onPatientChange(e.target.value)}
           options={patientNames}
-          errors={errors}
+          errors={errors?.selectedPatient}
         />
       </div>
     );
@@ -252,18 +251,20 @@ export default function EditShipment() {
           name="selectedMedication"
           label="Medication Name: "
           style={{ width: 200 }}
-          value={state?.selectedMedication}
+          // value={state?.selectedMedication}
           {...register("selectedMedication", {
             required: "Medication required",
           })}
-          handleChange={(e) =>
-            setState((prev) => ({
-              ...prev,
-              selectedMedication: e.target.value,
-            }))
-          }
+          handleChange={(e) => {
+            // setState((prev) => ({
+            //   ...prev,
+            //   selectedMedication: e.target.value,
+            // }))
+            setValue("selectedMedication", e.target.value);
+            clearErrors("selectedMedication", e.target.value);
+          }}
           options={medications}
-          errors={errors}
+          errors={errors.selectedMedication}
         />
       </div>
     );
@@ -284,18 +285,18 @@ export default function EditShipment() {
           name="selectedAddress"
           label="Patient Address: "
           style={{ width: 200 }}
-          value={state?.selectedAddress}
+          // value={state?.selectedAddress}
           {...register("selectedAddress", {
             required: "Patient address required",
           })}
-          handleChange={(e) =>
-            setState((prev) => ({
-              ...prev,
-              selectedAddress: e.target.value,
-            }))
-          }
+          handleChange={(e) => {
+            //   ...prev,
+            //   selectedAddress: e.target.value,
+            setValue("selectedAddress", e.target.value);
+            clearErrors("selectedAddress", e.target.value);
+          }}
           options={address}
-          errors={errors}
+          errors={errors?.selectedAddress}
         />
       </div>
     );
@@ -336,7 +337,6 @@ export default function EditShipment() {
                     type="text"
                     labelName="Track Url"
                     id="trackurl"
-                    value={state.trackUrl}
                     labelStyle={{ marginRight: 10 }}
                     style={{ marginBlock: 15 }}
                     register={{
@@ -348,13 +348,7 @@ export default function EditShipment() {
                         },
                       }),
                     }}
-                    onChange={(e) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        trackUrl: e.target.value,
-                      }))
-                    }
-                    errors={errors}
+                    errors={errors?.trackUrl}
                     placeholder="Track Url"
                   />
                 </div>
@@ -364,7 +358,7 @@ export default function EditShipment() {
                     labelName="Dosage"
                     name="dosage"
                     type="text"
-                    value={state.dosage}
+                    // value={state.dosage}
                     style={{ marginBlock: 15 }}
                     labelStyle={{ marginRight: 10 }}
                     register={{
@@ -372,14 +366,14 @@ export default function EditShipment() {
                         required: "Dosage required",
                       }),
                     }}
-                    onChange={(e) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        dosage: e.target.value,
-                      }))
-                    }
-                    errors={errors}
-                    placeholder="Track Url"
+                    // onChange={(e) =>
+                    //   setState((prevState) => ({
+                    //     ...prevState,
+                    //     dosage: e.target.value,
+                    //   }))
+                    // }
+                    errors={errors?.dosage}
+                    placeholder="Dosage"
                   />
                 </div>
               </div>
@@ -402,7 +396,7 @@ export default function EditShipment() {
                         required: "Please Select",
                       }),
                     }}
-                    errors={errors}
+                    errors={errors?.nextShipDate}
                     disabledDate={(current) => {
                       return (
                         current && current < dayjs(state.shipDate).add(1, "day")

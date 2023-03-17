@@ -33,7 +33,6 @@ export default function AddShipment() {
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
-  const params = useParams();
   const [state, setState] = useState({
     trackUrl: "",
     dosage: "",
@@ -99,13 +98,8 @@ export default function AddShipment() {
   };
 
   const onPatientChange = (e) => {
-    console.log(e);
-    setState((prev) => ({
-      ...prev,
-      selectedPatient: e,
-      selectedAddress: "",
-      selectedMedication: "",
-    }));
+    // setValue("selectedPatient", e);
+    // clearErrors("selectedPatient", e);
     onMedicationAndAddress(e);
   };
 
@@ -156,15 +150,12 @@ export default function AddShipment() {
           name="selectedPatient"
           label="Patient Name:"
           style={{ width: 200 }}
-          value={state?.selectedPatient}
           {...register("selectedPatient", {
             required: "Patient name required",
-            onChange: (e) => {},
-            onBlur: (e) => {},
           })}
           handleChange={(e) => onPatientChange(e.target.value)}
           options={patientNames}
-          errors={errors}
+          errors={errors?.selectedPatient}
         />
       </div>
     );
@@ -184,18 +175,15 @@ export default function AddShipment() {
           name="selectedMedication"
           label="Medication Name: "
           style={{ width: 200 }}
-          value={state?.selectedMedication}
           {...register("selectedMedication", {
             required: "Medication required",
           })}
-          handleChange={(e) =>
-            setState((prev) => ({
-              ...prev,
-              selectedMedication: e.target.value,
-            }))
-          }
+          handleChange={(e) => {
+            setValue("selectedMedication", e.target.value);
+            clearErrors("selectedMedication", e.target.value);
+          }}
           options={medications}
-          errors={errors}
+          errors={errors?.selectedMedication}
         />
       </div>
     );
@@ -216,18 +204,15 @@ export default function AddShipment() {
           name="selectedAddress"
           label="Patient Address: "
           style={{ width: 200 }}
-          value={state?.selectedAddress}
           {...register("selectedAddress", {
             required: "Patient address required",
           })}
-          handleChange={(e) =>
-            setState((prev) => ({
-              ...prev,
-              selectedAddress: e.target.value,
-            }))
-          }
+          handleChange={(e) => {
+            setValue("selectedAddress", e.target.value);
+            clearErrors("selectedAddress", e.target.value);
+          }}
           options={address}
-          errors={errors}
+          errors={errors?.selectedAddress}
         />
       </>
     );
@@ -285,7 +270,7 @@ export default function AddShipment() {
                         trackUrl: e.target.value,
                       }))
                     }
-                    errors={errors}
+                    errors={errors?.trackUrl}
                     placeholder="Track Url"
                   />
                 </div>
@@ -311,7 +296,7 @@ export default function AddShipment() {
                         dosage: e.target.value,
                       }))
                     }
-                    errors={errors}
+                    errors={errors?.dosage}
                     placeholder="Dosage"
                   />
                 </div>
@@ -328,7 +313,7 @@ export default function AddShipment() {
                         required: "Please Select",
                       }),
                     }}
-                    errors={errors}
+                    errors={errors?.shipDate}
                     onChange={(e) => onShipDateChange(e)}
                   />
                 </div>
@@ -343,7 +328,7 @@ export default function AddShipment() {
                           required: "Please Select",
                         }),
                       }}
-                      errors={errors}
+                      errors={errors?.nextShipDate}
                       disabledDate={(current) => {
                         return (
                           current &&

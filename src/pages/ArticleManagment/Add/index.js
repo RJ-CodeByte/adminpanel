@@ -17,7 +17,6 @@ export default function AddArticle() {
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
-  console.log(errors);
   const [image, setImage] = useState("");
 
   const onSubmit = (data) => {
@@ -71,9 +70,8 @@ export default function AddArticle() {
                   />
                 )}
               </div>
-              <div className="col-md-8">
+              <div className="col-md-8 mb-4">
                 <RenderInput
-                  // labelName={"Email"}
                   outerStyle={false}
                   name="title"
                   type="text"
@@ -86,11 +84,9 @@ export default function AddArticle() {
                         value: 2,
                         message: "Title must be at least 2 characters",
                       },
-                      // validate: () => handleEmailValidation(email, errors),
                     }),
                   }}
-                  // onChange={(e) => handleOnchange(e)}
-                  errors={errors}
+                  errors={errors?.title}
                   placeholder="Title"
                 />
               </div>
