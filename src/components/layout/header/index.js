@@ -4,6 +4,7 @@ import { LOGIN_F } from "../../../constants";
 import "./header.scss";
 import { logOutAction } from "../../../Redux/AuthSlice";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const Header = () => {
   // const dispatch = useDispatch();
@@ -30,9 +31,12 @@ const Header = () => {
           <button style={{ margin: 10 }} type="button" onClick={onLogout}>
             Logout
           </button>
-          <Link to="/changePassword">Change Password</Link>
+          <Link to="/changePassword" style={{ fontFamily: "RRO" }}>
+            Change Password
+          </Link>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

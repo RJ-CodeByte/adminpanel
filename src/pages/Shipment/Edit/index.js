@@ -21,6 +21,7 @@ import { DatePicker, Space } from "antd";
 
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 export default function EditShipment() {
   const {
@@ -161,7 +162,7 @@ export default function EditShipment() {
       };
       dispatch(editShipment(payload))
         .then((res) => {
-          alert(res?.message);
+          toast(res?.message);
           navigation("/add-Shipment");
         })
         .catch((err) => alert(err));
@@ -341,10 +342,10 @@ export default function EditShipment() {
                     style={{ marginBlock: 15 }}
                     register={{
                       ...register("trackUrl", {
-                        required: "Track URL required",
+                        required: "URL required",
                         minLength: {
                           value: 2,
-                          message: "Track URL must be at least 2 characters",
+                          message: "URL must be at least 2 characters",
                         },
                       }),
                     }}

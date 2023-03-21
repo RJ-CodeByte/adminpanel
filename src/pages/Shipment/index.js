@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { deleteShipment, shipmentListAction } from "../../Redux/ShipmentSlice";
 import moment from "moment";
 import "../../scss/formStyle.scss";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Shipment() {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ export default function Shipment() {
     };
     // alert("Are You sure you want to delete");
     dispatch(deleteShipment(payload))
-      .then((res) => alert(res?.message))
+      .then((res) => toast(res?.message))
       .catch((e) => alert(e));
     setShow(false);
   };

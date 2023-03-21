@@ -12,6 +12,7 @@ import {
 } from "../../components/common/FormField";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const SignIn = () => {
 
     dispatch(loginAction(requestPayload))
       .then((res) => navigate("/dashboard"))
-      .catch((err) => alert(err?.message || "Please try agian!"));
+      .catch((err) => toast(err?.message || "Please try agian!"));
   };
 
   const onSubmit = (data) => {
@@ -68,6 +69,7 @@ const SignIn = () => {
 
   return (
     <>
+      <ToastContainer />
       <div className="row vh-100">
         <div className="col-12 d-flex justify-content-center align-self-center">
           <div className="card p-5 w-50">

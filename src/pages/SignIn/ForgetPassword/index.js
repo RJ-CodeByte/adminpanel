@@ -6,6 +6,7 @@ import {
 import { useForm } from "react-hook-form";
 import { forgetPwdAction } from "../../../Redux/AuthSlice";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function ForgetPassword() {
   const dispatch = useDispatch();
@@ -25,13 +26,14 @@ export default function ForgetPassword() {
         email: email,
       };
       dispatch(forgetPwdAction(pwdData))
-        .then((res) => alert(res.message))
+        .then((res) => toast(res.message))
         .catch((err) => alert(err?.message || "Please try agian!"));
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <div className="row vh-100">
         <div className="col-12 d-flex  justify-content-center align-self-center">
           <div className="card p-5 w-50">

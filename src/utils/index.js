@@ -1,7 +1,15 @@
-import { LOGIN_F, LOGIN_S, LS_AUTHTOKEN, LS_USER } from "../constants";
+import {
+  API_IMAGE_BASE,
+  LOGIN_F,
+  LOGIN_S,
+  LS_AUTHTOKEN,
+  LS_USER,
+} from "../constants";
 
 //To concate the path for the public folder
 export const toAbsoluteUrl = (pathname) => process.env.PUBLIC_URL + pathname;
+
+export const toImageUrl = (pathname) => API_IMAGE_BASE + pathname;
 
 // Fun used for setting up the common header for axios through out the app and rehydrate the redux store
 export const setupAxios = (axios, store) => {

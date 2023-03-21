@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { editArticle, getArticle } from "../../../Redux/ArticleSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_IMAGE_BASE } from "../../../constants";
+import { toImageUrl } from "../../../utils";
 
 export default function EditArticle() {
   const {
@@ -39,7 +39,7 @@ export default function EditArticle() {
 
   useEffect(() => {
     setState({
-      image: API_IMAGE_BASE + "article/" + article.image,
+      image: toImageUrl("article/" + article.image),
       photo: "",
       title: article.title,
       content: article.content,

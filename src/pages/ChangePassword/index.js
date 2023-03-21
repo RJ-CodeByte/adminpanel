@@ -9,6 +9,7 @@ import "./../../scss/input.scss";
 import { changePwdAction, loaderChange } from "../../Redux/AuthSlice";
 import { RenderInput } from "../../components/common/FormField";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
 
 const MyAccount = () => {
   const dispatch = useDispatch();
@@ -44,12 +45,13 @@ const MyAccount = () => {
         repeatPassword: repeatpassword,
       };
       dispatch(changePwdAction(pwdData))
-        .then((res) => alert(res.message))
+        .then((res) => toast(res.message))
         .catch((err) => alert(err?.message || "Please try agian!"));
     }
   };
   return (
     <>
+      <ToastContainer />
       <div className="row">
         <div className="col-12 d-flex justify-content-center align-self-center">
           <div className="card p-5 w-50">

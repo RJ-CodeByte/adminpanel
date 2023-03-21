@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RenderInput } from "../../../components/common/FormField";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addArticle } from "../../../Redux/ArticleSlice";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AddArticle() {
   const {
@@ -30,7 +31,7 @@ export default function AddArticle() {
       formData.append("picture", testPhotos[0], testPhotos[0].name);
       dispatch(addArticle(formData))
         .then((res) => {
-          alert(res?.message);
+          toast(res?.message);
           navigation("/article-management");
         })
         .catch((err) => alert(err));

@@ -1,1 +1,7 @@
 @import "./scss/style.scss";
+// @import "./utils/index.js";
+@font-face {
+  font-family: "RRO";
+  src: local("RocknRollOne-Regular"),
+    url(("../public/fonts/RocknRollOne-Regular.ttf")) format("truetype");
+}

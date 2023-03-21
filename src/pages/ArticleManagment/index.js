@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { articleListAction, deleteArticle } from "../../Redux/ArticleSlice";
 import { Pagination } from "react-bootstrap";
-import { API_IMAGE_BASE } from "../../constants";
 import { Button } from "react-bootstrap";
 import AlertModal from "../../components/common/Modal";
 import { Link, useNavigate } from "react-router-dom";
+import { toAbsoluteUrl, toImageUrl } from "../../utils";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function ArticleManagement() {
   const dispatch = useDispatch();
@@ -84,8 +85,8 @@ export default function ArticleManagement() {
     };
     // alert("Are You sure you want to delete");
     dispatch(deleteArticle(payload))
-      .then((res) => alert(res?.message))
-      .catch((e) => alert(e));
+      .then((res) => toast(res?.message))
+      .catch((e) => toast(e));
     setShow(false);
   };
 
@@ -156,6 +157,7 @@ export default function ArticleManagement() {
           handleSave={handleDelete}
         />
       )}
+      <ToastContainer />
       <div
         className="m-4"
         style={{ display: "flex", justifyContent: "space-between", margin: 20 }}
@@ -201,14 +203,23 @@ export default function ArticleManagement() {
                         <td className="font-weight-bold pr-2">
                           <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
                             <img
-                              src={API_IMAGE_BASE + "article/" + obj.image}
+                              // src={toImageUrl("article/" + obj.image)}
+                              src={
+                                // obj.image
+                                //   ? toImageUrl("article/" + obj.image)
+                                //   :
+                                toAbsoluteUrl("/images/not_found.jpg")
+                              }
                               height="50"
                               width="50"
                             />
                           </div>
                         </td>
                         <td>
-                          <div className="align-items-center d-flex flex-wrap w-100 justify-content-center">
+                          <div
+                            className="align-items-center d-flex flex-wrap w-100 justify-content-center"
+                            style={{ fontFamily: "RRO" }}
+                          >
                             {obj.title}
                           </div>
                         </td>

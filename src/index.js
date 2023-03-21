@@ -1,5 +1,6 @@
 import React, { StrictMode } from "react";
 import "./index.scss";
+
 import App from "./container/App";
 import reportWebVitals from "./reportWebVitals";
 import { createRoot } from "react-dom/client";

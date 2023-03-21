@@ -17,6 +17,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import dayjs from "dayjs";
+import { ToastContainer, toast } from "react-toastify";
 // import { DatePicker, Space } from "antd";
 
 export default function AddShipment() {
@@ -90,7 +91,7 @@ export default function AddShipment() {
       };
       dispatch(addShipment(payload))
         .then((res) => {
-          alert(res?.message);
+          toast(res?.message);
           navigation("/add-Shipment");
         })
         .catch((err) => alert(err));
@@ -237,6 +238,7 @@ export default function AddShipment() {
   };
   return (
     <>
+      <ToastContainer />
       <div class="row">
         <div className="col-12 d-flex justify-content-center align-self-center ">
           <div className="card p-5">
@@ -257,10 +259,10 @@ export default function AddShipment() {
                     value={state.trackUrl}
                     register={{
                       ...register("trackUrl", {
-                        required: "Track URL required",
+                        required: "URL required",
                         minLength: {
                           value: 2,
-                          message: "Track URL must be at least 2 characters",
+                          message: "URL must be at least 2 characters",
                         },
                       }),
                     }}
