@@ -69,10 +69,6 @@ export const changePwdAction = (data) => ({
   payload: {
     url: API_CHANGE_PWD,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: JSON.parse(localStorage.getItem(LS_AUTHTOKEN)),
-    },
     data: data,
     hideLoader: false,
     success: (data) => ({
@@ -91,10 +87,6 @@ export const logOutAction = (authToken) => ({
   payload: {
     url: API_LOGOUT,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authToken,
-    },
     hideLoader: false,
     success: (data) => ({
       type: LOGOUT_S,
@@ -119,9 +111,6 @@ const loginSlice = createSlice({
   extraReducers: (builder) => {
     //login
     builder.addCase(LOGIN_S, (state, action) => {
-      // Default header for auth
-      axios.defaults.headers.common["Authorization"] = action.payload.token;
-
       localStorage.setItem(
         LS_AUTHTOKEN,
         JSON.stringify(action.payload.data.accessToken)

@@ -24,7 +24,7 @@ export class ErrorBoundary extends React.Component {
           <div className="content"> */}
             {/* <Link to={"/"}> */}
             <a href="/">
-              <button class="glow-on-hover" type="button">
+              <button className="glow-on-hover" type="button">
                 Go Back
               </button>
             </a>

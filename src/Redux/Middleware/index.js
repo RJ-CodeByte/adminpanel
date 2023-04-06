@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_BASE } from "../../constants";
 import { loaderChange } from "../AuthSlice";
+import instance from "../../utils/axiosInterceptorConfig";
 
 const reduxApiMiddleware = (store) => (next) => (action) => {
   if (next) next(action);
@@ -11,7 +12,6 @@ const reduxApiMiddleware = (store) => (next) => (action) => {
     const {
       url,
       data,
-      headers,
       success,
       error,
       hideLoader = false,
@@ -19,15 +19,13 @@ const reduxApiMiddleware = (store) => (next) => (action) => {
     } = payload;
 
     if (!hideLoader) store.dispatch(loaderChange(true));
-
-    return axios({
-      baseURL: API_BASE,
+    return instance({
       method,
       url,
       data,
-      headers,
     })
       .then((res) => {
+        console.log("res", res);
         store.dispatch(loaderChange(false));
 
         if (success) store.dispatch(success(res.data));

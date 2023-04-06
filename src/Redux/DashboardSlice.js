@@ -34,10 +34,10 @@ export const dashboardAction = () => ({
   payload: {
     url: API_DASHBOARD,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: JSON.parse(localStorage.getItem(LS_AUTHTOKEN)),
-    },
+    // headers: {
+    //   "Content-Type": "application/json",
+    //   Authorization: JSON.parse(localStorage.getItem(LS_AUTHTOKEN)),
+    // },
     hideLoader: false,
     success: (data) => ({
       type: DASHBOARD_S,

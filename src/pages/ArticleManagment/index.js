@@ -205,10 +205,9 @@ export default function ArticleManagement() {
                             <img
                               // src={toImageUrl("article/" + obj.image)}
                               src={
-                                // obj.image
-                                //   ? toImageUrl("article/" + obj.image)
-                                //   :
-                                toAbsoluteUrl("/images/not_found.jpg")
+                                obj.image
+                                  ? toImageUrl("article/" + obj.image)
+                                  : toAbsoluteUrl("/images/not_found.jpg")
                               }
                               height="50"
                               width="50"
